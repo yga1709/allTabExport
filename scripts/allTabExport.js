@@ -18,11 +18,8 @@ document.getElementById("export").onclick = () => {
       exportUrls[`titles${String(i + 1)}`] = dispStr;
       exportUrls[`urls${String(i + 1)}`] = tabs[i].url;
       exportUrls[`num`] = tabs.length;
-      /*console.log(
-        exportUrls[`titles${String(i)}`],
-        exportUrls[`urls${String(i)}`]
-      );*/
     }
+
     //その時Exportする予定のタブの数をアイコン下に表示
     chrome.browserAction.setBadgeText({ text: String(tabs.length) });
 
@@ -39,6 +36,13 @@ document.getElementById("export").onclick = () => {
     let json = JSON.stringify(exportUrls);
     let blob = new Blob([json], { type: "application/json" });
     let fileStamp = getTime();
+    //chrome.notificationsAPIの引数、options
+    const options = {
+      iconUrl: "../hello.png",
+      type: "basic",
+      title: "AllTabExport",
+      message: "Complite Export"
+    };
     let a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     console.log(a.href);
@@ -50,13 +54,11 @@ document.getElementById("export").onclick = () => {
       },
       e => console.log(e)
     );
+    chrome.notifications.create("", options);
   };
-
-  /*document.getElementById("saveButton").addEventListener("click", () => {
-    download(exportUrls);
-  });*/
 };
 
+//ファイル名用の時刻取得関数
 getTime = () => {
   let jikan = new Date();
   //時・分・秒を取得する
