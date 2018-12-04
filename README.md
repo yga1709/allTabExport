@@ -1,5 +1,7 @@
 # allTabExport
 
+This allTabExport made in the Web Application A.
+
 ## summary
 
 allTabExport saves the URL of the tab open in the active window in the JSON file.
