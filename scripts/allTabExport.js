@@ -79,7 +79,6 @@ getTime = () => {
 };
 
 document.getElementById("inport").onclick = () => {
-  let json;
   const inport = document.getElementById("inport");
   const reader = new FileReader();
 
@@ -89,13 +88,25 @@ document.getElementById("inport").onclick = () => {
     reader.readAsText(e.target.files[0]);
   });
   reader.onload = e => {
-    json = e.target.result;
-    console.log(json);
-    jsonperser(json);
+    let json = e.target.result;
+    const inportData = jsonperser(json);
+    //取得したURLのタイトルを表示するループ
+    for (let i = inportData["num"]; i > 0; i--) {
+      title.insertAdjacentHTML("afterbegin", `${inportData["titles" + i]}<br>`);
+    }
+    //タイトルの表示後に開くボタンを表示
+    document.getElementById(
+      "save"
+    ).innerHTML = `<button id="openButton">開く</button>`;
+    document.getElementById("openButton").onclick = () => {
+      for (let i = inportData["num"]; i > 0; i--) {
+        chrome.tabs.create({ url: inportData["urls" + i] });
+      }
+    };
   };
 };
 
 jsonperser = json => {
   openUrls = JSON.parse(json);
-  console.log(openUrls);
+  return openUrls;
 };
