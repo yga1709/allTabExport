@@ -10,9 +10,13 @@ document.getElementById("export").onclick = () => {
       checkUrl.href = tabs[i].url;
 
       dispStr = `${i + 1}. ${tabs[i].title}`;
+      dispStr = escape(dispStr);
 
       //popupに 「1. タイトル」の形式で表示。
-      title.insertAdjacentHTML("afterbegin", `${dispStr}<br>`);
+      title.insertAdjacentHTML(
+        "afterbegin",
+        `<div class="item">${dispStr}</div>`
+      );
 
       //Export用にexportUrls（連想配列）の中にタイトル（key:titles〇)とurl(key:urls〇)を追加。
       exportUrls[`titles${String(i + 1)}`] = dispStr;
@@ -27,7 +31,7 @@ document.getElementById("export").onclick = () => {
     document.getElementById("inport").disabled = true;
     document.getElementById(
       "save"
-    ).innerHTML = `<button id="saveButton">保存</button>`;
+    ).innerHTML = `<button class="ui primary button" id="saveButton">Save</button>`;
     document.getElementById("saveButton").onclick = () => {
       download();
     };
@@ -51,7 +55,7 @@ document.getElementById("export").onclick = () => {
     chrome.downloads.download(
       {
         url: a.href,
-        filename: `sample/AllTabExport${fileStamp}.json`
+        filename: `sample/allTabExport${fileStamp}.json`
       },
       e => console.log(e)
     );
@@ -90,6 +94,8 @@ document.getElementById("inport").onclick = () => {
   reader.onload = e => {
     let json = e.target.result;
     const inportData = jsonperser(json);
+    //取得したNumをアイコンの下に表示
+    chrome.browserAction.setBadgeText({ text: String(inportData["num"]) });
     //取得したURLのタイトルを表示するループ
     for (let i = inportData["num"]; i > 0; i--) {
       title.insertAdjacentHTML("afterbegin", `${inportData["titles" + i]}<br>`);
@@ -97,7 +103,8 @@ document.getElementById("inport").onclick = () => {
     //タイトルの表示後に開くボタンを表示
     document.getElementById(
       "save"
-    ).innerHTML = `<button id="openButton">開く</button>`;
+    ).innerHTML = `<button class="ui primary button" id="openButton">Open</button>`;
+    //開くが押された場合
     document.getElementById("openButton").onclick = () => {
       for (let i = inportData["num"]; i > 0; i--) {
         chrome.tabs.create({ url: inportData["urls" + i] });
@@ -109,4 +116,13 @@ document.getElementById("inport").onclick = () => {
 jsonperser = json => {
   openUrls = JSON.parse(json);
   return openUrls;
+};
+
+escape = content => {
+  return content
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 };

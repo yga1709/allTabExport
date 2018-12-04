@@ -2,15 +2,38 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./popup.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui-css@2.4.1/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
   <body>
-    <h1>All Tab Export</h1>
-    <div class="menu">
-      <button id="export">Export</button> <input type="file" id="inport"></input>
+    <container id="top">
+
+      <h1>allTabExport</h1>
+      <div class="ui inverted huge borderless fixed fluid menu red column">
+        <p class="header item" id='top'>allTabExport</p>
+      </div>
+  
+    </container>
+
+    <container id="export_container">
+      <div class="four wide column">
+        <button class="blue fluid ui button" id="export">Export</button> 
+      </div>
+      </container>
+      <container id="inport_container">
+        <div class="four wide columnui orange fluid centered message">
+          <input class="green fluid ui button" type="file" id="inport" ></input>
+        </div> 
+      </container>
+
+    <div class="ui list">
+      <div id="title"></div>
     </div>
-    <p id="title"></p>
+
     <div id="save"></div>
     <div id="drop_zone"></div> <output id="list"></output>
     </p>
+
     <script type="text/javascript" src="./scripts/allTabExport.js"></script>
   </body>
 </html>
