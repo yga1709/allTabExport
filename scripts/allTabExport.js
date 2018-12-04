@@ -63,25 +63,6 @@ document.getElementById("export").onclick = () => {
   };
 };
 
-//ファイル名用の時刻取得関数
-getTime = () => {
-  let jikan = new Date();
-  //時・分・秒を取得する
-  let hour = jikan.getHours();
-  let minute = jikan.getMinutes();
-  let second = jikan.getSeconds();
-
-  let hiduke = new Date();
-  //年・月・日・曜日を取得する
-  let year = hiduke.getFullYear();
-  let month = hiduke.getMonth() + 1;
-  let week = hiduke.getDay();
-  let day = hiduke.getDate();
-
-  let fileStamp = `${year}-${month}-${week}-${day}-${hour}-${minute}-${second}`;
-  return fileStamp;
-};
-
 document.getElementById("inport").onclick = () => {
   const inport = document.getElementById("inport");
   const reader = new FileReader();
@@ -118,6 +99,26 @@ jsonperser = json => {
   return openUrls;
 };
 
+//ファイル名用の時刻取得関数
+getTime = () => {
+  let data = new Date();
+  //時・分・秒を取得する
+  let hour = data.getHours();
+  let minute = data.getMinutes();
+  let second = data.getSeconds();
+
+  let time = new Date();
+  //年・月・日・曜日を取得する
+  let year = time.getFullYear();
+  let month = time.getMonth() + 1;
+  let week = time.getDay();
+  let day = time.getDate();
+
+  let fileStamp = `${year}-${month}-${week}-${day}-${hour}-${minute}-${second}`;
+  return fileStamp;
+};
+
+//htmlのエスケープメソッド
 escape = content => {
   return content
     .replace(/&/g, "&amp;")
