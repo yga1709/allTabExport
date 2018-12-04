@@ -66,6 +66,7 @@ document.getElementById("export").onclick = () => {
 document.getElementById("inport").onclick = () => {
   const inport = document.getElementById("inport");
   const reader = new FileReader();
+  document.getElementById("titleSuper").innerHTML(`<div id="title"></div>`);
 
   document.getElementById("export").disabled = true;
 
@@ -75,8 +76,11 @@ document.getElementById("inport").onclick = () => {
   reader.onload = e => {
     let json = e.target.result;
     const inportData = jsonperser(json);
+    console.log(inportData);
+
     //取得したNumをアイコンの下に表示
     chrome.browserAction.setBadgeText({ text: String(inportData["num"]) });
+
     //取得したURLのタイトルを表示するループ
     for (let i = inportData["num"]; i > 0; i--) {
       title.insertAdjacentHTML("afterbegin", `${inportData["titles" + i]}<br>`);
@@ -85,6 +89,7 @@ document.getElementById("inport").onclick = () => {
     document.getElementById(
       "save"
     ).innerHTML = `<button class="ui primary button" id="openButton">Open</button>`;
+
     //開くが押された場合
     document.getElementById("openButton").onclick = () => {
       for (let i = inportData["num"]; i > 0; i--) {
@@ -95,8 +100,10 @@ document.getElementById("inport").onclick = () => {
 };
 
 jsonperser = json => {
-  openUrls = JSON.parse(json);
-  return openUrls;
+  try {
+    openUrls = JSON.parse(json);
+    return openUrls;
+  } catch (e) {}
 };
 
 //ファイル名用の時刻取得関数
