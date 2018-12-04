@@ -24,6 +24,7 @@ document.getElementById("export").onclick = () => {
     chrome.browserAction.setBadgeText({ text: String(tabs.length) });
 
     document.getElementById("export").disabled = true;
+    document.getElementById("inport").disabled = true;
     document.getElementById(
       "save"
     ).innerHTML = `<button id="saveButton">保存</button>`;
@@ -75,4 +76,26 @@ getTime = () => {
 
   let fileStamp = `${year}-${month}-${week}-${day}-${hour}-${minute}-${second}`;
   return fileStamp;
+};
+
+document.getElementById("inport").onclick = () => {
+  let json;
+  const inport = document.getElementById("inport");
+  const reader = new FileReader();
+
+  document.getElementById("export").disabled = true;
+
+  inport.addEventListener("change", e => {
+    reader.readAsText(e.target.files[0]);
+  });
+  reader.onload = e => {
+    json = e.target.result;
+    console.log(json);
+    jsonperser(json);
+  };
+};
+
+jsonperser = json => {
+  openUrls = JSON.parse(json);
+  console.log(openUrls);
 };
