@@ -43,7 +43,7 @@ document.getElementById("export").onclick = () => {
     let fileStamp = getTime();
     //chrome.notificationsAPIの引数、options
     const options = {
-      iconUrl: "../hello.png",
+      iconUrl: "../icon.png",
       type: "basic",
       title: "AllTabExport",
       message: "Complite Export"
