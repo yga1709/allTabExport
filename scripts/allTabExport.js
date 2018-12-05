@@ -66,13 +66,15 @@ document.getElementById("export").onclick = () => {
 document.getElementById("inport").onclick = () => {
   const inport = document.getElementById("inport");
   const reader = new FileReader();
-  document.getElementById("titleSuper").innerHTML(`<div id="title"></div>`);
-
+  const title = document.getElementById("title");
+  title.innerHTML = "";
   document.getElementById("export").disabled = true;
 
   inport.addEventListener("change", e => {
     reader.readAsText(e.target.files[0]);
+    console.log(e.target.files[0]);
   });
+
   reader.onload = e => {
     let json = e.target.result;
     const inportData = jsonperser(json);
@@ -89,6 +91,7 @@ document.getElementById("inport").onclick = () => {
     document.getElementById(
       "save"
     ).innerHTML = `<button class="ui primary button" id="openButton">Open</button>`;
+    document.getElementById("inport").disabled = true;
 
     //開くが押された場合
     document.getElementById("openButton").onclick = () => {
