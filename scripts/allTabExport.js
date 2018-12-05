@@ -1,5 +1,6 @@
 document.getElementById("export").onclick = () => {
   let exportUrls = {};
+  //タイトル総数管理変数
   exportUrls[`num`] = 0;
   chrome.tabs.query({ windowType: "normal" }, tabs => {
     let title = document.getElementById("title");
@@ -27,20 +28,30 @@ document.getElementById("export").onclick = () => {
     //その時Exportする予定のタブの数をアイコン下に表示
     chrome.browserAction.setBadgeText({ text: String(tabs.length) });
 
+    //全てのボタンを押せなくする
     document.getElementById("export").disabled = true;
     document.getElementById("inport").disabled = true;
     document.getElementById(
       "save"
-    ).innerHTML = `<button class="ui primary button" id="saveButton">Save</button>`;
+    ).innerHTML = `<button class="ui primary button" id="saveButton">Save</button> or <div class="ui input"><input type="text" placeholder="Save as..." id="selfname"></div>`;
     document.getElementById("saveButton").onclick = () => {
-      download();
+      let name = document.getElementById("selfname").value;
+      if (name == null) {
+        download();
+      } else {
+        download(name);
+      }
     };
   });
 
-  download = data => {
+  download = name => {
     let json = JSON.stringify(exportUrls);
     let blob = new Blob([json], { type: "application/json" });
     let fileStamp = getTime();
+    let filename = `alltabexport/allTabExport${fileStamp}.json`;
+    if (name) {
+      filename = name + ".json";
+    }
     //chrome.notificationsAPIの引数、options
     const options = {
       iconUrl: "../icon.png",
@@ -55,7 +66,7 @@ document.getElementById("export").onclick = () => {
     chrome.downloads.download(
       {
         url: a.href,
-        filename: `sample/allTabExport${fileStamp}.json`
+        filename: filename
       },
       e => console.log(e)
     );
@@ -67,7 +78,6 @@ document.getElementById("inport").onclick = () => {
   const inport = document.getElementById("inport");
   const reader = new FileReader();
   const title = document.getElementById("title");
-  title.innerHTML = "";
   document.getElementById("export").disabled = true;
 
   inport.addEventListener("change", e => {
@@ -93,7 +103,6 @@ document.getElementById("inport").onclick = () => {
     ).innerHTML = `<button class="ui primary button" id="openButton">Open</button>`;
     document.getElementById("inport").disabled = true;
 
-    //開くが押された場合
     document.getElementById("openButton").onclick = () => {
       for (let i = inportData["num"]; i > 0; i--) {
         chrome.tabs.create({ url: inportData["urls" + i] });

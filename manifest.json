@@ -1,6 +1,6 @@
 {
   "name": "All Tab Export",
-  "description": "Base Level Extension",
+  "description": "開いているタブをJSONファイルへ出力。JSONファイルを読み取り、保存したタブを開くことも可能。WebアプリケーションA制作作品",
   "version": "1.0",
   "manifest_version": 2,
   "permissions": ["tabs", "https://*/*", "downloads", "notifications"],
