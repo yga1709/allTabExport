@@ -75,6 +75,9 @@ document.getElementById("export").onclick = () => {
 };
 
 document.getElementById("inport").onclick = () => {
+  if (document.getElementById("export").disabled) {
+    return 0;
+  }
   const inport = document.getElementById("inport");
   const reader = new FileReader();
   const title = document.getElementById("title");
@@ -86,24 +89,32 @@ document.getElementById("inport").onclick = () => {
   });
 
   reader.onload = e => {
+    //document.getElementById("inport").disabled = true;
     let json = e.target.result;
     const inportData = jsonperser(json);
+    let str = ``;
     console.log(inportData);
 
     //取得したNumをアイコンの下に表示
     chrome.browserAction.setBadgeText({ text: String(inportData["num"]) });
 
     //取得したURLのタイトルを表示するループ
-    for (let i = inportData["num"]; i > 0; i--) {
-      title.insertAdjacentHTML("afterbegin", `${inportData["titles" + i]}<br>`);
+    //for (let i = inportData["num"]; i > 0; i--) {
+    for (let i = 1; i <= inportData["num"]; i++) {
+      str += `${inportData["titles" + i]}<br>`;
+      //title.insertAdjacentHTML("afterbegin", `${inportData["titles" + i]}<br>`);
+      title.innerHTML = str;
     }
     //タイトルの表示後に開くボタンを表示
     document.getElementById(
       "save"
     ).innerHTML = `<button class="ui primary button" id="openButton">Open</button>`;
-    document.getElementById("inport").disabled = true;
 
     document.getElementById("openButton").onclick = () => {
+      if (10 <= inportData["num"]) {
+        let check = confirm("大量のタブを開こうとしています。");
+        if (!check) return 0;
+      }
       for (let i = inportData["num"]; i > 0; i--) {
         chrome.tabs.create({ url: inportData["urls" + i] });
       }
