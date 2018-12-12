@@ -16,7 +16,7 @@ document.getElementById("export").onclick = () => {
       //popupに 「1. タイトル」の形式で表示。
       title.insertAdjacentHTML(
         "afterbegin",
-        `<div class="item">${dispStr}</div>`
+        `<div class="item"><a href="${tabs[i].url}">${dispStr}</a></div>`
       );
 
       //Export用にexportUrls（連想配列）の中にタイトル（key:titles〇)とurl(key:urls〇)を追加。
@@ -101,7 +101,9 @@ document.getElementById("inport").onclick = () => {
     //取得したURLのタイトルを表示するループ
     //for (let i = inportData["num"]; i > 0; i--) {
     for (let i = 1; i <= inportData["num"]; i++) {
-      str += `${inportData["titles" + i]}<br>`;
+      str += `<a href="${inportData["urls" + i]}">${
+        inportData["titles" + i]
+      }</a><br>`;
       //title.insertAdjacentHTML("afterbegin", `${inportData["titles" + i]}<br>`);
       title.innerHTML = str;
     }
