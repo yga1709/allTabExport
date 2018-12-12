@@ -10,7 +10,7 @@ document.getElementById("export").onclick = () => {
     for (var i = tabs.length - 1; i >= 0; i--) {
       checkUrl.href = tabs[i].url;
 
-      dispStr = `${i + 1}. ${tabs[i].title}`;
+      dispStr = `・${tabs[i].title}`;
       dispStr = escape(dispStr);
 
       //popupに 「1. タイトル」の形式で表示。
