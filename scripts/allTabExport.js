@@ -5,11 +5,8 @@ document.getElementById("export").onclick = () => {
   chrome.tabs.query({ windowType: "normal" }, tabs => {
     let title = document.getElementById("title");
     let dispStr;
-    let checkUrl = document.createElement("a");
 
     for (var i = tabs.length - 1; i >= 0; i--) {
-      checkUrl.href = tabs[i].url;
-
       dispStr = `・${tabs[i].title}`;
       dispStr = escape(dispStr);
 
@@ -51,15 +48,15 @@ document.getElementById("export").onclick = () => {
     if (name) {
       fileStamp = name + ".json";
     } else {
-      fileStamp = getTime();
+      fileStamp = `allTabExport${getTime()}.json`;
     }
-    let filename = `alltabexport/allTabExport${fileStamp}.json`;
+    let filename = `alltabexport/${fileStamp}`;
 
     //chrome.notificationsAPIの引数、options
     const options = {
       iconUrl: "../icon.png",
       type: "basic",
-      title: "AllTabExport",
+      title: "allTabExport",
       message: "Complite Export"
     };
     let a = document.createElement("a");
@@ -92,7 +89,6 @@ document.getElementById("inport").onclick = () => {
   });
 
   reader.onload = e => {
-    //document.getElementById("inport").disabled = true;
     let json = e.target.result;
     const inportData = jsonperser(json);
     let str = ``;
@@ -102,14 +98,13 @@ document.getElementById("inport").onclick = () => {
     chrome.browserAction.setBadgeText({ text: String(inportData["num"]) });
 
     //取得したURLのタイトルを表示するループ
-    //for (let i = inportData["num"]; i > 0; i--) {
     for (let i = 1; i <= inportData["num"]; i++) {
       str += `<a href="${inportData["urls" + i]}">${
         inportData["titles" + i]
       }</a><br>`;
-      //title.insertAdjacentHTML("afterbegin", `${inportData["titles" + i]}<br>`);
       title.innerHTML = str;
     }
+
     //タイトルの表示後に開くボタンを表示
     document.getElementById(
       "save"
@@ -142,8 +137,8 @@ getTime = () => {
   let minute = data.getMinutes();
   let second = data.getSeconds();
 
-  let time = new Date();
   //年・月・日・曜日を取得する
+  let time = new Date();
   let year = time.getFullYear();
   let month = time.getMonth() + 1;
   let day = time.getDate();
