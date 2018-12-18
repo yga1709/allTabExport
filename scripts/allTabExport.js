@@ -47,11 +47,14 @@ document.getElementById("export").onclick = () => {
   download = name => {
     let json = JSON.stringify(exportUrls);
     let blob = new Blob([json], { type: "application/json" });
-    let fileStamp = getTime();
-    let filename = `alltabexport/allTabExport${fileStamp}.json`;
+    let fileStamp;
     if (name) {
-      filename = name + ".json";
+      fileStamp = name + ".json";
+    } else {
+      fileStamp = getTime();
     }
+    let filename = `alltabexport/allTabExport${fileStamp}.json`;
+
     //chrome.notificationsAPIの引数、options
     const options = {
       iconUrl: "../icon.png",
@@ -143,10 +146,9 @@ getTime = () => {
   //年・月・日・曜日を取得する
   let year = time.getFullYear();
   let month = time.getMonth() + 1;
-  let week = time.getDay();
   let day = time.getDate();
 
-  let fileStamp = `${year}-${month}-${week}-${day}-${hour}-${minute}-${second}`;
+  let fileStamp = `${year}-${month}-${day}-${hour}-${minute}-${second}`;
   return fileStamp;
 };
 
